@@ -1,18 +1,62 @@
-## NX Currents example
-This repository shows how to use NX with Currents
+# Currents Playwright NX Example
 
-## How to test it?
-It is ready to use. You only need to:
-- Install dependencies: `npm install`
-- Execute in the root of the project: `CURRENTS_RECORD_KEY=your-key CURRENTS_PROJECT_ID=your-id  CURRENTS_CI_BUILD_ID=unique-id npx nx run-many -t e2e --verbose --parallel=2`
+This repository shows how to use NX + Playwright with Currents.
 
-## Explanation
-This NX workspace contains 2 projects within `apps` folder: `example-app` and `example-app-e2e`.
-These two projects has as target `e2e` to that will be the target to run when using `-t e2e` in the previous command.
-The `--parallel=2` will execute each project in different machines parallelizing the execution by project.
+## Setup
 
-## Considerations
-- The `pwc-p` is being used as executed command in `project.json` files
-- When using `CURRENTS_CI_BUILD_ID` env variable is will generate a single run for all your parallelized project
-- IMPORTANT: It is not advisable to use the same Playwright project names across NX projects because it can cause a mismatch in the reported results
-- [See this job](https://github.com/miguelangaranocurrents/nx-example/actions/runs/11958598465) to understand how parallelized orchestration works with NX
+```sh
+npm i -g nx@latest
+npm i
+```
+
+## Run
+
+```sh
+CURRENTS_RECORD_KEY=recordkey \
+CURRENTS_PROJECT_ID=projectid \
+CURRENTS_CI_BUILD_ID=`date +%s` \
+nx run-many -t e2e  --parallel=2 --verbose
+```
+
+### Output directory
+
+Playwright output directory is set in `project.json` > `targets.e2e.options.output`, for example:
+
+```json
+ "targets": {
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "options": {
+        "skipInstall": true,
+        "output": "{workspaceRoot}/playwright-report/{projectName}",
+        "config": "{projectRoot}/playwright.config.ts"
+      }
+    }
+  }
+```
+
+After running the tests, results will appear as:
+
+```plain
+playwright-report/
+├── e2e-01/
+│   └── .last-run.json
+└── e2e-02/
+    └── .last-run.json
+```
+
+ℹ️ `playwright.config.ts` for each project use `nxE2EPreset` - it sets a different `output` directory, but `project.json:output` overrides it.
+
+## Last Failed
+
+nx passes down unrecognized arguments to the target command, for example
+
+```sh
+nx run-many -t e2e  --parallel=2 --verbose --last-failed
+# ...
+
+ NX   Ran target e2e for 2 projects (7s)
+
+      With additional flags:
+        --last-failed=true
+```
