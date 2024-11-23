@@ -11,11 +11,32 @@ npm i
 
 ## Run
 
+The repo has two projects and each has its own tests.
+
 ```sh
 CURRENTS_RECORD_KEY=recordkey \
 CURRENTS_PROJECT_ID=projectid \
 CURRENTS_CI_BUILD_ID=`date +%s` \
 nx run-many -t e2e  --parallel=2 --verbose
+
+# ...
+
+ NX   Running target e2e for 2 projects
+
+   →  Executing 2/2 remaining tasks in parallel...
+
+   ⠙  nx run e2e-01:e2e
+   ⠙  nx run e2e-02:e2e
+
+# ...
+
+ NX   Ran target e2e for 2 projects (8s)
+
+   ✔  1/2 succeeded [0 read from cache]
+
+   ✖  1/2 targets failed, including the following:
+
+      - nx run e2e-01:e2e
 ```
 
 ### Output directory
@@ -47,7 +68,7 @@ playwright-report/
 
 ℹ️ `playwright.config.ts` for each project use `nxE2EPreset` - it sets a different `output` directory, but `project.json:output` overrides it.
 
-## Last Failed
+### Last Failed
 
 nx passes down unrecognized arguments to the target command, for example
 
