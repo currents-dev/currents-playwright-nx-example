@@ -4,9 +4,10 @@
 dist
 tmp
 /out-tsc
-
+.nx
 # dependencies
 node_modules
+playwright-report
 
 # IDEs and editors
 /.idea

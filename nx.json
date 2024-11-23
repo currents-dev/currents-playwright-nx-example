@@ -21,53 +21,10 @@
       }
     }
   },
-  "plugins": [
-    {
-      "plugin": "@nx/vite/plugin",
-      "options": {
-        "buildTargetName": "build",
-        "testTargetName": "test",
-        "serveTargetName": "serve",
-        "previewTargetName": "preview",
-        "serveStaticTargetName": "serve-static",
-        "typecheckTargetName": "typecheck"
-      }
-    },
-    {
-      "plugin": "@nx/playwright/plugin",
-      "options": {
-        "ciTargetName": "e2e-ci",
-        "targetName": "e2e"
-      }
-    },
-    {
-      "plugin": "@nx/jest/plugin",
-      "options": {
-        "targetName": "test"
-      }
-    }
-  ],
+
   "targetDefaults": {
     "e2e-ci--**/*": {
       "dependsOn": ["^build"]
     }
-  },
-  "generators": {
-    "@nx/react": {
-      "application": {
-        "babel": true,
-        "style": "css",
-        "linter": "eslint",
-        "bundler": "vite"
-      },
-      "component": {
-        "style": "css"
-      },
-      "library": {
-        "style": "css",
-        "linter": "eslint"
-      }
-    }
-  },
-  "useInferencePlugins": true
+  }
 }
