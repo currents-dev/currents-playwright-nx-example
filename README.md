@@ -80,4 +80,15 @@ nx run-many -t e2e  --parallel=2 --verbose --last-failed
 
       With additional flags:
         --last-failed=true
+# ...
+ NX   Ran target e2e for 2 projects (7s)
+
+      With additional flags:
+        --last-failed=true
+
+   ✔  1/2 succeeded [0 read from cache]
+
+   ✖  1/2 targets failed, including the following:
+
+      - nx run e2e-01:e2e
 ```
