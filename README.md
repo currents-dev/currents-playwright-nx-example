@@ -92,3 +92,25 @@ nx run-many -t e2e  --parallel=2 --verbose --last-failed
 
       - nx run e2e-01:e2e
 ```
+
+## Single project orchestration
+
+The project named `e2e-03` has a different target than the other two projects. The target is `or8n`
+This target project executes `pwc-p` command. When using it in multiple machines it will execute in parallel the tests of this project.
+
+```sh
+CURRENTS_RECORD_KEY=recordkey \
+CURRENTS_PROJECT_ID=projectid \
+CURRENTS_CI_BUILD_ID=`date +%s` \
+nx run-many -t or8n
+
+# ...
+
+ NX   Running target or8n for 1 project
+
+   ⠙  nx run e2e-03:or8n
+```
+
+The `parallel` flag is no longer needed as it is running a single nx project.
+
+The `or8n.yml` file has an example for running it in Github actions.
