@@ -15,6 +15,9 @@ jobs:
     strategy:
       matrix:
         shard: [1, 2, 3]
+    env:
+      CURRENTS_PROJECT_ID: ${{secrets.CURRENTS_PROJECT_ID}}
+      CURRENTS_RECORD_KEY: ${{secrets.CURRENTS_RECORD_KEY}}
 
     steps:
       - name: Checkout repository
@@ -26,10 +29,11 @@ jobs:
       - name: Reset NX
         run: npx nx reset
 
+      - name: Playwright Last Failed action
+        id: last-failed-action
+        uses: currents-dev/playwright-last-failed@v1
+        with:
+          pw-output-dir: playwright-report
+
       - name: Run All E2E Tests
-        env:
-          CURRENTS_API_URL: https://cy-staging.currents.dev
-          CURRENTS_PROJECT_ID: ${{secrets.CURRENTS_PROJECT_ID}}
-          CURRENTS_RECORD_KEY: ${{secrets.CURRENTS_RECORD_KEY}}
-          CURRENTS_CI_BUILD_ID: ${{ github.run_id }}-${{ github.sha }}
-        run: npx nx run-many -t e2e --verbose --parallel=2 --base=main~1 --head=HEAD
+        run: npx nx run-many -t e2e --verbose --parallel=2 ${{ steps.last-failed-action.outputs.extra-pw-flags }}
